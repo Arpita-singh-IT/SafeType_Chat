@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+    <div class="header-right">
+        <button id="theme-toggle" onclick="toggleThemeMenu()">🎨 Theme</button>
+        <div id="theme-menu" class="hidden">
+            <button onclick="setTheme('amethyst')">Amethyst (Purple)</button>
+            <button onclick="setTheme('emerald')">Emerald (Green)</button>
+            <button onclick="setTheme('ocean')">Ocean (Blue)</button>
+        </div>
+        
+    </div>
+</div>
+
+<div id="timeout-popup" class="centered-popup-overlay" style="display: none;">
+    <div class="mod-card timeout-card">
+        <div class="mod-icon">⏳</div>
+        <h2 class="popup-title">Take a breather</h2>
+        <p class="popup-sub">You've ignored 3 warnings in a row. You can chat again in:</p>
+        <div id="countdown">10</div>
+        <p class="popup-sub">Let's keep the community respectful.</p>
+    </div>
+</div>
+  <link rel="stylesheet" href="style.css" />
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h1>SafeType Chat</h1>
+      <div id="online-count">Online: 1</div>
+    </div>
+
+    <div class="messages-container" id="messages"></div>
+
+    <div class="keyboard-container">
+      <div class="display-area">
+        <div id="typed-text"></div>
+        <span id="cursor">|</span>
+      </div>
+
+      <div class="keyboard">
+        <div class="keyboard-row">
+          <button class="key num" data-key="1">1</button>
+          <button class="key num" data-key="2">2</button>
+          <button class="key num" data-key="3">3</button>
+          <button class="key num" data-key="4">4</button>
+          <button class="key num" data-key="5">5</button>
+          <button class="key num" data-key="6">6</button>
+          <button class="key num" data-key="7">7</button>
+          <button class="key num" data-key="8">8</button>
+          <button class="key num" data-key="9">9</button>
+          <button class="key num" data-key="0">0</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key" data-key="q">Q</button><button class="key" data-key="w">W</button>
+          <button class="key" data-key="e">E</button><button class="key" data-key="r">R</button>
+          <button class="key" data-key="t">T</button><button class="key" data-key="y">Y</button>
+          <button class="key" data-key="u">U</button><button class="key" data-key="i">I</button>
+          <button class="key" data-key="o">O</button><button class="key" data-key="p">P</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key" data-key="a">A</button><button class="key" data-key="s">S</button>
+          <button class="key" data-key="d">D</button><button class="key" data-key="f">F</button>
+          <button class="key" data-key="g">G</button><button class="key" data-key="h">H</button>
+          <button class="key" data-key="j">J</button><button class="key" data-key="k">K</button>
+          <button class="key" data-key="l">L</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key" data-key="z">Z</button><button class="key" data-key="x">X</button>
+          <button class="key" data-key="c">C</button><button class="key" data-key="v">V</button>
+          <button class="key" data-key="b">B</button><button class="key" data-key="n">N</button>
+          <button class="key" data-key="m">M</button>
+          <button class="key wide" id="backspace">←</button>
+        </div>
+        <div class="keyboard-row">
+          <button class="key emoji" data-key="😊">😊</button>
+          <button class="key emoji" data-key="😂">😂</button>
+          <button class="key extra-wide" id="space" data-key=" ">Space</button>
+          <button class="key emoji" data-key="❤️">❤️</button>
+          <button class="key send" id="send-btn" onclick="checkContent()">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="moderation-popup" class="centered-popup-overlay" style="display: none;">
+      <div class="mod-card">
+          <div class="mod-icon">💙</div>
+          <h2 class="popup-title">Let's keep it positive!</h2>
+          <p class="popup-sub" id="mod-message-body"></p>
+          <p id="suggestion-intro">Let me try saying that more kindly...</p>
+          <div id="suggestion-box"></div>
+          <div class="popup-actions">
+              <button class="mod-btn anyway-btn" onclick="sendAnyway()">Send Anyway</button>
+              <button class="mod-btn cancel-btn" onclick="unlockKeyboard()">Cancel</button>
+          </div>
+      </div>
+  </div>
+
+  <script src="keyboard.js"></script>
+  <script>
+    const socket = io();
+    const messages = document.getElementById('messages');
+    let username = prompt("Enter your name:", "Guest") || "Guest";
+    socket.emit('join', username);
+
+    socket.on('chatMessage', data => addMessage(data));
+    socket.on('onlineCount', count => document.getElementById('online-count').textContent = `Online: ${count}`);
+
+    function addMessage({ username: sender, text, time }) {
+      const div = document.createElement('div');
+      div.className = `message ${sender === username ? 'sender' : 'receiver'}`;
+      div.innerHTML = `<span class="sender-name">${sender}</span><br>${text}<span class="timestamp">${time || 'now'}</span>`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    window.addEventListener('safeMessageReady', e => {
+      socket.emit('chatMessage', e.detail.message);
+    });
+  </script>
+</body>
+</html>

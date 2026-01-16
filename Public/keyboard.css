@@ -1,0 +1,199 @@
+/* keyboard.css - working, centered, compact, beautiful */
+
+.keyboard-container {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;               /* max width on large screens */
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,0,0,0.12);
+  padding: 0.8rem 0.6rem 1.2rem;
+  box-shadow: 0 -6px 20px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+/* Display */
+.display-area {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.8rem;
+  min-height: 3.6rem;
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.08);
+}
+
+#typed-text {
+  font-size: 1.15rem;
+  line-height: 1.4;
+  color: #111827;
+  min-height: 2.6rem;
+  word-break: break-word;
+}
+
+/* Keyboard layout */
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.suggestion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.suggestion-btn {
+    background: rgba(96, 98, 222, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    color: #c084fc;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestion-btn:hover {
+    background: rgba(99, 102, 241, 0.3);
+    transform: translateX(5px);
+}
+
+.warning-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 150;
+    backdrop-filter: blur(2px);
+}
+
+/* Keys */
+.key {
+  flex: 0 1 auto;
+  width: 3.2rem;
+  height: 3.2rem;
+  background: #f1f5f9;
+  color: #1e293b;
+  border: none;
+  border-radius: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.14s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  touch-action: manipulation;
+}
+
+.key:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.key:active {
+  transform: translateY(1px);
+  background: #cbd5e1;
+}
+
+.wide { width: 4.8rem; }
+.extra-wide { width: 9rem; font-size: 0.95rem; }
+
+.backspace {
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 1.3rem;
+  width: 4.8rem;
+}
+
+.space {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+/* Send button */
+.send {
+  width: 6rem;
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(99,102,241,0.3);
+}
+
+.send:hover {
+  background: linear-gradient(135deg, #4f46e5, #6d28d9);
+}
+
+/* Mobile adjustments */
+@media (max-width: 520px) {
+  .keyboard-container {
+    padding: 0.7rem 0.5rem 1rem;
+  }
+  .key { width: 2.8rem; height: 2.8rem; font-size: 0.95rem; }
+  .extra-wide { width: 8rem; }
+  .wide { width: 4.2rem; }
+  .display-area { min-height: 3rem; }
+  #typed-text { font-size: 1rem; }
+}
+/* Warning popup - darker, modern overlay style */
+.warning-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30, 30, 45, 0.96);     /* Darker background */
+  color: #e0e0ff;                         /* Light text for contrast */
+  padding: 1.6rem 1.8rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  max-width: 90%;
+  text-align: center;
+  z-index: 200;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.warning-popup h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #c084fc;                         /* Soft purple heading */
+  font-weight: 600;
+}
+
+.warning-popup p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.4rem;
+  color: #b0b0ff;
+}
+
+/* Button inside popup */
+.warning-popup button {
+  padding: 0.7rem 1.4rem;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s ease;
+}
+
+.warning-popup button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+
+.warning-popup button:active {
+  transform: translateY(0);
+}
